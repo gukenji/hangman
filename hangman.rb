@@ -6,12 +6,20 @@ class Hangman
     @@serializer = JSON
 
     def initialize
+        @filename = 'google-10000-english-no-swears.txt'
+        @mistakes = 0 
+        @attempted_words = []
+        start_game
+    end
+
+    def start_game
         puts "Deseja carregar um jogo exitente? Selecione S ou N"
         @load_state = gets.chomp.downcase
         until @load_state == "s" || @load_state == "n"
             puts "Selecione apenas S ou N!"
             @load_state = gets.chomp.downcase
         end
+
         if @load_state == "s"
             @save_states = Hash.new(0)
             Dir["savefiles/*"].length.times do |index|
@@ -35,14 +43,13 @@ class Hangman
         else
             puts "Por favor, digite o nome do seu jogo para salvar quando quiser:"
             @save_name = gets.chomp.downcase
-            filename = 'google-10000-english-no-swears.txt'
-            @mistakes = 0 
-            @attempted_words = []
-            generate_random_word(filename)
+
+            generate_random_word(@filename)
             @player_word = hide_words(@random_word)
             puts "Ok! Iremos começar o jogo. A sua palavra contém a seguinte configuração:"
             new_attempt
         end
+
     end
 
     private
